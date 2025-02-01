@@ -25,7 +25,7 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description": _("""Sagt auf Knopfdruck den Fortschritt der Progressbar an."""),
 	# version
-	"addon_version": "0.1.3",
+	"addon_version": "0.1.4",
 	# Author(s)
 	"addon_author": "Imam kahraman <imam.kahraman@googlemail.com>",
 	# URL for the add-on documentation support
