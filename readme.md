@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=DB9N3QDZLR822)
+
 # Progress Reader – NVDA-Addon
 (C) 2025, Imam Kahraman
 
@@ -53,6 +55,9 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ## 4) Versionsverlauf
 
+### v0.1.4
+- Behoben: Erkennung von UI-Elementen im Kopier- und Verschiebedialog von Windows.
+
 ### v0.1.3
 - Tastenkombination umgestellt auf NVDA + SHIFT + U
 - Update der Tastenkombination in ReadMe-Datei
@@ -88,3 +93,5 @@ Dieses Add-on wird ohne jegliche Garantie oder Gewährleistung bereitgestellt. D
 (C) 2025, Imam Kahraman
 
 Lizenz: GNU General Public License v3 (GPL-3.0) (siehe LICENSE-Datei: https://www.gnu.org/licenses/gpl-3.0.txt)
+
+[Spenden via PayPal](https://www.paypal.com/donate/?hosted_button_id=DB9N3QDZLR822)
