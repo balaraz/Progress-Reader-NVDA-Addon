@@ -55,6 +55,11 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ## 4) Versionsverlauf
 
+### v0.1.5
+- Einrückungen im Code auf Tabs umgestellt
+- englische Übersetzung hinzugefügt.
+- Fehler in der readme-Datei behoben
+
 ### v0.1.4
 - Behoben: Erkennung von UI-Elementen im Kopier- und Verschiebedialog von Windows.
 

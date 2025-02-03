@@ -16,22 +16,22 @@ def _(arg):
 # Add-on information variables
 addon_info = {
 	# add-on Name/identifier, internal for NVDA
-	"addon_name": "Progress Reader",
+	"addon_name": "ProgressReader",
 	# Add-on summary, usually the user visible name of the addon.
 	# Translators: Summary for this add-on
 	# to be shown on installation and add-on information found in Add-ons Manager.
-	"addon_summary": _("Progress Reader"),
+	"addon_summary": _("ProgressReader"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description": _("""Sagt auf Knopfdruck den Fortschritt der Progressbar an."""),
 	# version
-	"addon_version": "0.1.4",
+	"addon_version": '0.1.5',
 	# Author(s)
 	"addon_author": "Imam kahraman <imam.kahraman@googlemail.com>",
 	# URL for the add-on documentation support
-	"addon_url": None,
+	"addon_url": "https://github.com/vbprofi/Progress-Reader-NVDA-Addon/",
 	# URL for the add-on repository where the source code can be found
-	"addon_sourceURL": None,
+	"addon_sourceURL": "https://github.com/vbprofi/Progress-Reader-NVDA-Addon/",
 	# Documentation file name
 	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2018.3.0", minor version is optional)
@@ -59,7 +59,7 @@ addon_info = {
 pythonSources = ["addon/globalPlugins/*.py"]
 
 # Files that contain strings for translation. Usually your python sources
-i18nSources = pythonSources + ["buildVars.py"]
+i18nSources = pythonSources + ["buildVars.py", "addon/globalPlugins/progressReader.py"]
 
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.

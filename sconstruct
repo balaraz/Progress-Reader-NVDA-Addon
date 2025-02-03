@@ -26,6 +26,7 @@ def md2html(source, dest):
 	mdExtensions = buildVars.markdownExtensions
 	lang = os.path.basename(os.path.dirname(source)).replace("_", "-")
 	localeLang = os.path.basename(os.path.dirname(source))
+	print(localeLang)
 	try:
 		_ = gettext.translation(
 			"nvda", localedir=os.path.join("addon", "locale"), languages=[localeLang]
