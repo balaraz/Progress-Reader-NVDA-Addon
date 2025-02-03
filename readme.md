@@ -84,7 +84,7 @@ Dieses Add-on wird unter der GNU General Public License v3 (GPL-3.0) veröffentl
 
 ### Lizenzbestimmungen:
 - Dieses Add-on ist freie Software und darf verbreitet, verändert und weitergegeben werden, solange es Open Source bleibt.  
-- Jegliche Modifikationen müssen mit dem ursprünglichen Autor (Imam Kahraman) abgesprochen und unter derselben Lizenz veröffentlicht werden.
+- Jegliche Modifikationen müssen unter derselben Lizenz (GPLv3) veröffentlicht werden.
 - Die Verwendung in proprietärer oder kommerzieller Software ist untersagt.
 
 ### Haftungsausschluss:
