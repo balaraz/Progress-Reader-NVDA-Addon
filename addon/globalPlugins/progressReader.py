@@ -15,22 +15,21 @@ import re
 addonHandler.initTranslation()
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
-	"""Ein globales Plugin für NVDA, das den Fortschritt von Progressbars vorliest."""
+	"""A global plugin for NVDA that reads the progress of progress bars."""
 
 	def __init__(self):
-		"""Initialisiert das globale Plugin."""
-
+		"""Initializes the global plugin."""
 		super().__init__()
 
 	def _parseValue(self, value):
 		"""
-		Konvertiert verschiedene Wertformate in numerische Werte.
+		Converts various value formats into numeric values.
 
 		Args:
-			value (str, float, int): Der zu konvertierende Wert.
+			value (str, float, int): The value to be converted.
 
 		Returns:
-			float: Der konvertierte numerische Wert oder 0.0 bei einem Fehler.
+			float: The converted numeric value or 0.0 in case of an error.
 		"""
 		try:
 			if isinstance(value, str):
@@ -46,128 +45,170 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	)
 	def script_readProgress(self, gesture):
 		"""
-		Liest den Fortschritt einer Progressbar vor.
+		Reads the progress of one or more progress bars.
 
 		Args:
-			gesture: Das auslösende Gestenobjekt.
+			gesture: The triggering gesture object.
 		"""
 		try:
-			progressBar, progressText = self._findProgressBar()
+			progressBars = self._findProgressBars()
 
-			if not progressBar:
+			if not progressBars:
 				ui.message(_("Keine Progressbar gefunden"))
 				return
 
-			# Wenn der Fortschrittstext direkt aus dem Namen gelesen wurde
-			if progressText:
-				ui.message(progressText)
-				return
+			if len(progressBars) == 1:
+				progressBar, progressText = progressBars[0]
+				if progressText:
+					ui.message(progressText)
+					return
 
-			# Werte auslesen mit Fallbacks
-			current = self._parseValue(
-				getattr(progressBar, 'value',
-						getattr(progressBar, 'IAccessibleObject', None) and
-						getattr(progressBar.IAccessibleObject, 'accValue', lambda x: "0")(0) or
-						0)
-			)
+				current = self._parseValue(
+					getattr(progressBar, 'value',
+							getattr(progressBar, 'IAccessibleObject', None) and
+							getattr(progressBar.IAccessibleObject, 'accValue', lambda x: "0")(0) or
+							0)
+				)
 
-			maxValue = self._parseValue(
-				getattr(progressBar, 'maxValue',
-						getattr(progressBar, 'IAccessibleObject', None) and
-						getattr(progressBar.IAccessibleObject, 'accMaximum', lambda x: "100")(0) or
-						100)
-			)
+				maxValue = self._parseValue(
+					getattr(progressBar, 'maxValue',
+							getattr(progressBar, 'IAccessibleObject', None) and
+							getattr(progressBar.IAccessibleObject, 'accMaximum', lambda x: "100")(0) or
+							100)
+				)
 
-			# Falls maxValue nicht ermittelt werden kann, setzen wir es auf 100
-			if maxValue <= 0:
-				maxValue = 100
+				if maxValue <= 0:
+					maxValue = 100
 
-			if current < 0:
-				current = 0
+				if current < 0:
+					current = 0
 
-			percent = (current / maxValue) * 100
-			percent = max(0.0, min(100.0, percent))  # Begrenzung auf 0-100%
+				percent = (current / maxValue) * 100
+				percent = max(0.0, min(100.0, percent))
 
-			# Status abfragen (falls verfügbar)
-			status = ""
-			if hasattr(progressBar, 'states'):
-				if controlTypes.State.BUSY in progressBar.states:
-					status = _(" (aktiv)")
-				elif controlTypes.State.UNAVAILABLE in progressBar.states:
-					status = _(" (inaktiv)")
+				status = ""
+				if hasattr(progressBar, 'states'):
+					if controlTypes.State.BUSY in progressBar.states:
+						status = _(" (aktiv)")
+					elif controlTypes.State.UNAVAILABLE in progressBar.states:
+						status = _(" (inaktiv)")
 
-			ui.message(_("{percent}% Fortschritt{status}").format(
-				percent=round(percent, 1),
-				status=status
-			))
+				ui.message(_("{percent}% Fortschritt{status}").format(
+					percent=round(percent, 1),
+					status=status
+				))
+			else:
+				messages = []
+				for progressBar, progressText in progressBars:
+					if progressText:
+						messages.append(progressText)
+						continue
+
+					current = self._parseValue(
+						getattr(progressBar, 'value',
+								getattr(progressBar, 'IAccessibleObject', None) and
+								getattr(progressBar.IAccessibleObject, 'accValue', lambda x: "0")(0) or
+								0)
+					)
+
+					maxValue = self._parseValue(
+						getattr(progressBar, 'maxValue',
+								getattr(progressBar, 'IAccessibleObject', None) and
+								getattr(progressBar.IAccessibleObject, 'accMaximum', lambda x: "100")(0) or
+								100)
+					)
+
+					if maxValue <= 0:
+						maxValue = 100
+
+					if current < 0:
+						current = 0
+
+					percent = (current / maxValue) * 100
+					percent = max(0.0, min(100.0, percent))
+
+					status = ""
+					if hasattr(progressBar, 'states'):
+						if controlTypes.State.BUSY in progressBar.states:
+							status = _(" (aktiv)")
+						elif controlTypes.State.UNAVAILABLE in progressBar.states:
+							status = _(" (inaktiv)")
+
+					messages.append(_("{percent}% Fortschritt{status}").format(
+						percent=round(percent, 1),
+						status=status
+					))
+
+				ui.browseableMessage("\n".join(messages), isHtml=False)
 
 		except Exception as e:
 			ui.message(_("Fehler beim Auslesen: {}").format(str(e)))
 
-	def _findProgressBar(self):
+	def _findProgressBars(self):
 		"""
-		Sucht nach einer Progressbar im aktiven Fenster.
+		Searches for all progress bars in the active window.
 
 		Returns:
-			tuple: Ein Tupel aus dem gefundenen Progressbar-Objekt und dem Fortschrittstext (falls vorhanden).
+			list: A list of tuples containing the found progress bar object and the progress text (if available).
 		"""
 		q = Queue()
 		root = api.getForegroundObject()
 		q.put(root)
+		progressBars = []
 
 		while not q.empty():
 			obj = q.get()
 
 			try:
-				# 🟢 1. Windows Kopiervorgang: Fenster "OperationStatusWindow" in beiden Ansichten
+				# 🟢 1. Windows copy operation: "OperationStatusWindow" in both views
 				if obj.windowClassName == "OperationStatusWindow":
-					# Fortschritt aus dem Namen des Fensters auslesen
+					# Read progress from the window name
 					name = getattr(obj, 'name', '')
 					if name and "%" in name:
-						return obj, name  # Gib das Objekt und den Fortschrittstext zurück
+						progressBars.append((obj, name))  # Add the object and progress text to the list
 
-					# Suche nach einer Progressbar in den Kindern
+					# Search for a progress bar in the children
 					for child in obj.children:
-						# UIA-Erkennung für Details-Ansicht
+						# UIA detection for detailed view
 						if hasattr(child, "UIAElement") and child.UIAElement:
 							if child.UIAElement.controlType == UIAHandler.UIA_ControlTypeIds.PROGRESSBAR:
-								return child, None
+								progressBars.append((child, None))
 
-						# Fallback: IAccessible für Kompakt-Ansicht
+						# Fallback: IAccessible for compact view
 						if hasattr(child, 'IAccessibleObject') and child.IAccessibleObject:
 							if child.IAccessibleObject.accRole(0) == controlTypes.Role.PROGRESSBAR:
-								return child, None
+								progressBars.append((child, None))
 
-				# 🟢 2. UIA-Progressbars allgemein
+				# 🟢 2. General UIA progress bars
 				if hasattr(obj, 'UIAElement') and obj.UIAElement:
 					if obj.UIAElement.controlType == UIAHandler.UIA_ControlTypeIds.PROGRESSBAR:
-						return obj, None
+						progressBars.append((obj, None))
 
-				# 🟢 3. IAccessible-Progressbars
+				# 🟢 3. IAccessible progress bars
 				if hasattr(obj, 'IAccessibleObject') and obj.IAccessibleObject:
 					if obj.IAccessibleObject.accRole(0) == controlTypes.Role.PROGRESSBAR:
-						return obj, None
+						progressBars.append((obj, None))
 
-				# 🟢 4. NVDA Standard-Erkennung
+				# 🟢 4. NVDA standard detection
 				if obj.role == controlTypes.ROLE_PROGRESSBAR:
-					return obj, None
+					progressBars.append((obj, None))
 
-				# 🟢 5. wx.Gauge (nur wenn explizit als Progressbar erkennbar)
+				# 🟢 5. wx.Gauge (only if explicitly recognizable as a progress bar)
 				if hasattr(obj, "value") and hasattr(obj, "maxValue"):
-					return obj, None
+					progressBars.append((obj, None))
 
-				# 🔄 Kinder zum Queue hinzufügen (nur falls vorhanden)
+				# 🔄 Add children to the queue (if available)
 				for child in getattr(obj, 'children', []):
 					q.put(child)
 
 			except Exception:
-				continue  # Falls ein Objekt keine Kinder hat, einfach überspringen
+				continue  # Skip if an object has no children
 
-		return None, None
+		return progressBars
 
 	def debug_UIA_tree(self):
 		"""
-		Gibt die UIA-Struktur des aktiven Fensters aus. Eine Helferfunktion für die Entwicklung.
+		Outputs the UIA structure of the active window. A helper function for development.
 		"""
 		def traverse(obj, depth=0):
 			indent = "  " * depth
