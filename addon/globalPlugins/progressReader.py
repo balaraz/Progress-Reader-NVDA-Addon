@@ -150,7 +150,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 						status=status
 					))
 
-				ui.browseableMessage("\n".join(messages), isHtml=False)
+				if messages:
+					ui.browseableMessage("\n".join(messages), isHtml=False)
+				else:
+					ui.message(_("Keine Progressbar gefunden"))
 
 		except Exception as e:
 			ui.message(_("Fehler beim Auslesen: {}").format(str(e)))
@@ -183,30 +186,38 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 						# UIA detection for detailed view
 						if hasattr(child, "UIAElement") and child.UIAElement:
 							if child.UIAElement.controlType == UIAHandler.UIA_ControlTypeIds.PROGRESSBAR:
-								progressBars.append((child, None))
+								if child.value is not None:  # 🔹 Only add if a value exists.
+									progressBars.append((child, str(child.value)))
 
 						# Fallback: IAccessible for compact view
 						if hasattr(child, 'IAccessibleObject') and child.IAccessibleObject:
 							if child.IAccessibleObject.accRole(0) == controlTypes.Role.PROGRESSBAR:
-								progressBars.append((child, None))
+								val = child.IAccessibleObject.accValue(0)  # try for get value
+								if val and "%" in val:
+									progressBars.append((child, val))
 
 				# 🟢 2. General UIA progress bars
 				if hasattr(obj, 'UIAElement') and obj.UIAElement:
 					if obj.UIAElement.controlType == UIAHandler.UIA_ControlTypeIds.PROGRESSBAR:
-						progressBars.append((obj, None))
+						if obj.value is not None:
+							progressBars.append((obj, str(obj.value)))
 
 				# 🟢 3. IAccessible progress bars
 				if hasattr(obj, 'IAccessibleObject') and obj.IAccessibleObject:
 					if obj.IAccessibleObject.accRole(0) == controlTypes.Role.PROGRESSBAR:
-						progressBars.append((obj, None))
+						val = obj.IAccessibleObject.accValue(0)
+						if val and "%" in val:
+							progressBars.append((obj, val))
 
 				# 🟢 4. NVDA standard detection
 				if obj.role == controlTypes.ROLE_PROGRESSBAR:
-					progressBars.append((obj, None))
+					if obj.value is not None:
+						progressBars.append((obj, str(obj.value)))
 
 				# 🟢 5. wx.Gauge (only if explicitly recognizable as a progress bar)
 				if hasattr(obj, "value") and hasattr(obj, "maxValue"):
-					progressBars.append((obj, None))
+					if obj.value > 0:
+						progressBars.append((obj, str(obj.value)))
 
 				# 🔄 Add children to the queue (if available)
 				for child in getattr(obj, 'children', []):
@@ -215,7 +226,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			except Exception:
 				continue  # Skip if an object has no children
 
-		return progressBars
+		return progressBars if progressBars else []
 
 	def debug_UIA_tree(self):
 		"""
