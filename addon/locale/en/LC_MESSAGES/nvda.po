@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'ProgressReader' '0.1.4'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2025-02-03 21:45+0100\n"
+"POT-Creation-Date: 2025-02-04 17:50+0100\n"
 "PO-Revision-Date: 2025-02-03 22:15+0100\n"
 "Last-Translator: Imam Kahraman <imam.kahraman@googlemail.com>\n"
 "Language-Team: English\n"
@@ -18,28 +18,38 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.5\n"
 
-#: addon\globalPlugins\ProgressReader.py:32
+#. Define a category for the add-on in the input gestures dialog
+#: addon\globalPlugins\ProgressReader.py:24
+#, fuzzy
+msgid "Progress Reader"
+msgstr "ProgressReader"
+
+#: addon\globalPlugins\ProgressReader.py:53
 msgid "Liest den Fortschritt der Progressbar vor"
 msgstr "Reads the progress of the progress bar aloud."
 
-#: addon\globalPlugins\ProgressReader.py:40
+#: addon\globalPlugins\ProgressReader.py:68
+#: addon\globalPlugins\ProgressReader.py:156
 msgid "Keine Progressbar gefunden"
 msgstr "No progress bar found."
 
-#: addon\globalPlugins\ProgressReader.py:77
+#: addon\globalPlugins\ProgressReader.py:103
+#: addon\globalPlugins\ProgressReader.py:144
 msgid " (aktiv)"
 msgstr " (active)"
 
-#: addon\globalPlugins\ProgressReader.py:79
+#: addon\globalPlugins\ProgressReader.py:105
+#: addon\globalPlugins\ProgressReader.py:146
 msgid " (inaktiv)"
 msgstr " (inactive)"
 
-#: addon\globalPlugins\ProgressReader.py:81
+#: addon\globalPlugins\ProgressReader.py:107
+#: addon\globalPlugins\ProgressReader.py:148
 #, python-brace-format
 msgid "{percent}% Fortschritt{status}"
 msgstr "{percent}% Progress {status}"
 
-#: addon\globalPlugins\ProgressReader.py:87
+#: addon\globalPlugins\ProgressReader.py:159
 msgid "Fehler beim Auslesen: {}"
 msgstr "Error while progress: {}"
 

@@ -55,6 +55,10 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ## 4) Versionsverlauf
 
+### v0.1.7
+- Bugfix: Korrekte Erkennung von Fortschrittsbalken – verhindert fälschliche "0% Fortschritt"-Anzeigen.
+- Anpassen der Sprachdateien.
+
 ### v0.1.6
 - Mehrere gefundene Fortschrittsbalken in einem Fenster werden in einem Textfenster ausgegeben
 - Änderung der Tastenkombination über den Einstellungsdialog möglich: Addon wird in einer eigenen Kategorie angezeigt
