@@ -20,6 +20,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
 		"""Initializes the global plugin."""
 		super().__init__()
+		# Define a category for the add-on in the input gestures dialog
+		self.category = _("Progress Reader")
+
+	def chooseGesture(self, gesture):
+		"""
+		Allows the user to change the gesture for the add-on in the input gestures dialog.
+		"""
+		# This method is called when the user wants to change the gesture for the add-on
+		# We can simply return the gesture that was passed in, or modify it as needed
+		return gesture
 
 	def _parseValue(self, value):
 		"""
@@ -41,7 +51,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(
 		description=_("Liest den Fortschritt der Progressbar vor"),
-		gesture="kb:NVDA+Shift+U"
+		gesture="kb:NVDA+Shift+U",
+		category="Progress Reader"  # Assign the script to the "Progress Reader" category
 	)
 	def script_readProgress(self, gesture):
 		"""
