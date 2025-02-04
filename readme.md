@@ -7,6 +7,8 @@ Lizenz: GNU General Public License v3 (GPL-3.0) (siehe LICENSE-Datei: https://ww
 
 Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschiedenen Anwendungen auszulesen und den aktuellen Fortschritt per Sprachausgabe wiederzugeben. Die Erkennung erfolgt über mehrere Schnittstellen, um eine breite Kompatibilität mit unterschiedlichen Software-Technologien sicherzustellen.
 
+[Hier geht es zur aktuellen Version zum Download](https://davidacm.github.io/getlatest/gh/vbprofi/Progress-Reader-NVDA-Addon/)
+
 ---
 
 ## Inhalt
@@ -29,7 +31,7 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ### Manuelle Installation (.nvda-addon-Datei)
 #### Falls das Add-on nicht im Store verfügbar ist:
-1. Lade die `.nvda-addon`-Datei herunter.
+1. Lade die `.nvda-addon`-Datei herunter. Hier geht es zur aktuellen Version zum [Download](https://davidacm.github.io/getlatest/gh/vbprofi/Progress-Reader-NVDA-Addon/)
 2. Öffne NVDA und navigiere zu Werkzeuge > Store für Addon-Erweiterungen.
 3. Klicke auf „Aus externer Quelle installieren…“ und wähle die `.nvda-addon`-Datei aus.
 4. Bestätige die Installation und starte NVDA neu, um das Add-on zu aktivieren.
