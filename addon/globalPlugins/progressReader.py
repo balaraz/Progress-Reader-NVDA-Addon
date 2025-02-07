@@ -1,6 +1,15 @@
+# NVDA Addon: ProgressReader
+# A global plugin for NVDA that announces the progress of the progress bar on pressing a button.
+# Author: Imam Kahraman
+# Contact: imam.kahraman@googlemail.com
+# GitHub: https://github.com/vbprofi/Progress-Reader-NVDA-Addon/
+# Version: 0.2.0
+# License: GNU General Public License v3 (GPL-3.0)
+# License File: https://www.gnu.org/licenses/gpl-3.0.txt
 # Copyright (C) 2024-2025 Imam Kahraman
 # Released under GNU General Public License v3 (GPL-3.0)
 # License File: https://www.gnu.org/licenses/gpl-3.0.txt
+
 import globalPluginHandler
 import ui
 import api
@@ -20,7 +29,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
 		"""Initializes the global plugin."""
 		super().__init__()
+
 		# Define a category for the add-on in the input gestures dialog
+		# Translators: Category name for the add-on in the input gestures dialog
 		self.category = _("Progress Reader")
 
 	def chooseGesture(self, gesture):
@@ -50,6 +61,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return 0.0
 
 	@script(
+		# Translators: Description of the script that reads the progress of progress bars
 		description=_("Liest den Fortschritt der Progressbar vor"),
 		gesture="kb:NVDA+Shift+U",
 		category="Progress Reader"  # Assign the script to the "Progress Reader" category
@@ -65,6 +77,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			progressBars = self._findProgressBars()
 
 			if not progressBars:
+				# Translators: Message when no progress bar is found
 				ui.message(_("Keine Progressbar gefunden"))
 				return
 
@@ -100,11 +113,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				status = ""
 				if hasattr(progressBar, 'states'):
 					if controlTypes.State.BUSY in progressBar.states:
+						# Translators: Status message when the progress bar is busy
 						status = _(" (aktiv)")
 					elif controlTypes.State.UNAVAILABLE in progressBar.states:
+						# Translators: Status message when the progress bar is unavailable
 						status = _(" (inaktiv)")
 
-				ui.message(_("{percent}% Fortschritt{status}").format(
+				# Translators: Message that announces the progress percentage and status
+				ui.message(_("{percent}% Fortschritt {status}").format(
 					percent=round(percent, 1),
 					status=status
 				))
@@ -141,11 +157,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 					status = ""
 					if hasattr(progressBar, 'states'):
 						if controlTypes.State.BUSY in progressBar.states:
+							# Translators: Status message when the progress bar is busy
 							status = _(" (aktiv)")
 						elif controlTypes.State.UNAVAILABLE in progressBar.states:
+							# Translators: Status message when the progress bar is unavailable
 							status = _(" (inaktiv)")
 
-					messages.append(_("{percent}% Fortschritt{status}").format(
+					# Translators: Message that announces the progress percentage and status
+					messages.append(_("{percent}% Fortschritt {status}").format(
 						percent=round(percent, 1),
 						status=status
 					))
@@ -153,9 +172,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				if messages:
 					ui.browseableMessage("\n".join(messages), isHtml=False)
 				else:
+					# Translators: Message when no progress bar is found
 					ui.message(_("Keine Progressbar gefunden"))
 
 		except Exception as e:
+			# Translators: Error message when an exception occurs while reading progress
 			ui.message(_("Fehler beim Auslesen: {}").format(str(e)))
 
 	def _findProgressBars(self):
@@ -219,6 +240,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 					if obj.value > 0:
 						progressBars.append((obj, str(obj.value)))
 
+
+
 				# 🔄 Add children to the queue (if available)
 				for child in getattr(obj, 'children', []):
 					q.put(child)
@@ -227,16 +250,3 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				continue  # Skip if an object has no children
 
 		return progressBars if progressBars else []
-
-	def debug_UIA_tree(self):
-		"""
-		Outputs the UIA structure of the active window. A helper function for development.
-		"""
-		def traverse(obj, depth=0):
-			indent = "  " * depth
-			ui.message(f"{indent} - {obj.name} ({obj.role}) [{obj.windowClassName}]")
-			for child in getattr(obj, 'children', []):
-				traverse(child, depth + 1)
-
-		root = api.getForegroundObject()
-		traverse(root)
