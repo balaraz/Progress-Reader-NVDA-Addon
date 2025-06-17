@@ -57,6 +57,9 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ## 4) Versionsverlauf
 
+### v0.2.2
+- Für NVDA 2025.1.1 aktualisiert.
+
 ### v0.2.1
 - Für NVDA 2024.4.2 aktualisiert.
 
