@@ -3,7 +3,7 @@
 # Author: Imam Kahraman
 # Contact: imam.kahraman@googlemail.com
 # GitHub: https://github.com/vbprofi/Progress-Reader-NVDA-Addon/
-# Version: 0.2.2
+# Version: 0.2.3
 # License: GNU General Public License v3 (GPL-3.0)
 # License File: https://www.gnu.org/licenses/gpl-3.0.txt
 # Copyright (C) 2024-2025 Imam Kahraman
