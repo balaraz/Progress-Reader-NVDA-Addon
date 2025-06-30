@@ -57,6 +57,9 @@ Dieses NVDA-Addon ermöglicht es, Fortschrittsbalken (Progressbars) in verschied
 
 ## 4) Versionsverlauf
 
+### v0.2.4
+- Für NVDA 2025.2 aktualisiert.
+
 ### v0.2.3
 - Für NVDA 2025.1.2 aktualisiert.
 - Neue Sprache vereinfachtes Chinesisch (zh_CN) hinzugefügt.
